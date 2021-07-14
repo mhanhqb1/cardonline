@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/user/info', function () {
+    return view('users/temp_1');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
