@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Validator;
 
 class RegisteredUserController extends Controller
 {
@@ -33,14 +34,20 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        Validator::extend('valid_user_name', function($attr, $value){
+            return preg_match('/^\S*$/u', $value);
+        });
         $request->validate([
-            'name' => 'required|string|max:255',
+            'user_name' => 'required|valid_user_name|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'valid_user_name' => __('Please enter valid user name')
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'name' => '',
+            'user_name' => $request->user_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
