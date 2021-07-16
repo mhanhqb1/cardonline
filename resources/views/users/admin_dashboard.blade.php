@@ -2,32 +2,41 @@
 $userInfos = [
     'avatar' => [
         'icon' => 'user-circle',
-        'title' => 'Hinh anh'
+        'title' => __('user.avatar')
     ],
     'name' => [
         'icon' => 'user',
-        'title' => 'Ho ten'
+        'title' => __('user.name')
     ],
     'job_title' => [
         'icon' => 'network-wired',
-        'title' => 'Cong viec'
+        'title' => __('user.job_title')
+    ],
+    'company_name' => [
+        'icon' => 'chart-pie',
+        'title' => __('user.company_name')
     ],
     'phone' => [
         'icon' => 'phone-square',
-        'title' => 'So dien thoai'
+        'title' => __('user.phone')
     ],
     'address' => [
         'icon' => 'building',
-        'title' => 'Dia chi'
+        'title' => __('user.address')
     ],
+];
+$colors = [
+    '#fff', '#0066ff', '#333333', '#a6a6a6', '#E6E6E6', '#F9F9F9'
 ];
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
@@ -46,13 +55,26 @@ $userInfos = [
             color: #232323;
         }
 
-        .bg-1 {
-            background-color: #333;
+        .btn {
+            padding: 0 24px;
+            line-height: 32px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
         }
 
-        .color-1 {
-            color: #fff;
+        @foreach($colors as $k=> $v)
+        .bg-{{ $k+1 }} {
+            background-color: {{ $v }};
         }
+        .c-{{ $k+1 }} {
+            color: {{ $v }};
+        }
+        .bc-{{ $k+1 }} {
+            border-color: {{ $v }};
+        }
+        @endforeach
 
         header {
             width: 100%;
@@ -68,6 +90,11 @@ $userInfos = [
             border-radius: 10px;
             width: 90%;
             max-width: 1024px;
+        }
+
+        .btn-submit {
+            margin: 0 auto;
+            display: block;
         }
 
         .tabs {
@@ -86,6 +113,7 @@ $userInfos = [
             justify-content: center;
             color: #232323;
         }
+
         .tabs>a>span {
             display: block;
         }
@@ -97,7 +125,6 @@ $userInfos = [
 
         .info>div {
             padding: 12px 24px;
-            background-color: #F9F9F9;
             margin: 12px 0;
             border-radius: 10px;
             display: flex;
@@ -113,14 +140,17 @@ $userInfos = [
         .info>div>div {
             flex: 1;
         }
+
         .info>div>div label {
             color: #7E7E7E;
             font-size: 12px;
         }
+
         .info>div>div .user-input {
             position: relative;
             margin-top: 5px;
         }
+
         .info>div>div .user-input input {
             width: 100%;
             padding: 10px 40px 10px 10px;
@@ -129,6 +159,7 @@ $userInfos = [
             border: 1px solid #a6a6a6;
             border-radius: 5px;
         }
+
         .info>div>div .user-input span {
             position: absolute;
             top: 50%;
@@ -140,45 +171,86 @@ $userInfos = [
 </head>
 
 <body class="">
-    <header class="bg-1">
-        <a href="/" class="color-1">
+    <header class="bg-3">
+        <a href="/" class="c-1">
             <h1>Home page</h1>
         </a>
     </header>
     <div class="container">
         <div class="tabs">
             <a href="/" class="active">
-                <span><i class="fas fa-house-user"></i></span> Trang ca nhan
+                <span><i class="fas fa-house-user"></i></span> {{ __('sys.user_info') }}
             </a>
             <a href="/">
-                <span><i class="fas fa-adjust"></i></span> Giao dien
+                <span><i class="fas fa-adjust"></i></span> {{ __('sys.theme') }}
             </a>
             <a href="/">
-                <span><i class="fas fa-user-lock"></i></span> Doi mat khau
+                <span><i class="fas fa-user-lock"></i></span> {{ __('sys.change_pass') }}
             </a>
             <a href="/">
-                <span><i class="fas fa-sign-out-alt"></i></span> Dang xuat
+                <span><i class="fas fa-sign-out-alt"></i></span> {{ __('sys.logout') }}
             </a>
         </div>
         <div class="tab-content">
             <div class="info">
                 <h2 class="info-header">Gioi thieu</h2>
-                <?php foreach ($userInfos as $k => $v): ?>
-                <div>
-                    <span><i class="fas fa-{{ $v['icon'] }}"></i></span>
-                    <div>
-                        <label>{{ $v['title'] }}</label>
-                        <div class="user-input">
-                            <input type="text" name="{{ $k }}" value=""/>
-                            <!-- <span><i class="fas fa-edit"></i></span> -->
+                <?php foreach ($userInfos as $k => $v) : ?>
+                    <div class='bg-6'>
+                        <span><i class="fas fa-{{ $v['icon'] }}"></i></span>
+                        <div>
+                            <label>{{ $v['title'] }}</label>
+                            <div class="user-input">
+                                <input type="text" name="{{ $k }}" value="{{ $user->$k }}" class="input-value" />
+                                <!-- <span><i class="fas fa-edit"></i></span> -->
+                            </div>
                         </div>
                     </div>
-                </div>
                 <?php endforeach; ?>
+                <button class='btn bg-2 bc-2 c-1 btn-submit'>{{ __('sys.update') }}</button>
             </div>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+        const apiUrl = '{{ route('user.update_info') }}';
+        const apiSuccessMessage = '{{ __('sys.save_success') }}';
+        const apiErrorMessage = '{{ __('sys.save_error') }}';
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.info .btn-submit').on('click', function() {
+                let parent = $(this).closest(".info");
+                let data = {};
+                parent.find('.input-value').each(function(e) {
+                    let _val = $(this).val();
+                    let _name = $(this).attr('name');
+                    data[_name] = _val;
+                });
+                $.ajax({
+                    url: apiUrl,
+                    data: data,
+                    type: "POST",
+                    dataType: "Json",
+                    success: function(data) {
+                        if (data.status == 'OK') {
+                            toastr.success(apiSuccessMessage);
+                        } else {
+                            toastr.error(apiErrorMessage);
+                        }
+                    },
+                    error: function() {
+                        toastr.error(apiErrorMessage);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

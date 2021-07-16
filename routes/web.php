@@ -22,5 +22,6 @@ Route::get('/user/info', function () {
 });
 
 Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
+Route::post('/updateInfo', [HomeController::class, 'updateInfo'])->middleware(['auth'])->name('user.update_info');
 
 require __DIR__.'/auth.php';
