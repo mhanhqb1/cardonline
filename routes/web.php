@@ -20,8 +20,9 @@ Route::get('/', function () {
 Route::get('/user/info', function () {
     return view('users/temp_1');
 });
+Route::get('/{user_name}', [HomeController::class, 'userInfo'])->name('user.info');
 
-Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
-Route::post('/updateInfo', [HomeController::class, 'updateInfo'])->middleware(['auth'])->name('user.update_info');
+Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
+Route::post('/users/updateInfo', [HomeController::class, 'updateInfo'])->middleware(['auth'])->name('user.update_info');
 
 require __DIR__.'/auth.php';

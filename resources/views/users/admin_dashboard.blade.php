@@ -173,7 +173,7 @@ $colors = [
 <body class="">
     <header class="bg-3">
         <a href="/" class="c-1">
-            <h1>Home page</h1>
+            <h1>{{ config('app.name') }}</h1>
         </a>
     </header>
     <div class="container">

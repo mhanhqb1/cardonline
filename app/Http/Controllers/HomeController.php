@@ -47,4 +47,20 @@ class HomeController extends Controller
         echo json_encode($result);
         die();
     }
+
+    /**
+     * Get user info
+     *
+     * @return \Illuminate\View\View
+     */
+    public function userInfo($userName)
+    {
+        $user = User::where('user_name', $userName)->first();
+        if (!empty($user)) {
+            return view('users.temp_1', compact(
+                'user'
+            ));
+        }
+        return abort(404);
+    }
 }
