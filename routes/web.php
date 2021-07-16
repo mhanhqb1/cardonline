@@ -17,6 +17,16 @@ use App\Http\Controllers\HomeController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/s/migrate', function () {
+    \Artisan::call('migrate');
+    dd("Cache is cleared");
+});
+Route::get('/s/clear_cache', function () {
+    \Artisan::call('route:clear');
+    \Artisan::call('config:clear');
+    \Artisan::call('cache:clear');
+    dd("Cache is cleared");
+});
 Route::get('/user/info', function () {
     return view('users/temp_1');
 });
