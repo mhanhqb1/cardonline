@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Models\Theme;
 
 class HomeController extends Controller
 {
@@ -19,6 +20,21 @@ class HomeController extends Controller
         $user = Auth::user();
         return view('users.admin_dashboard', compact(
             'user'
+        ));
+    }
+
+    /**
+     * Show user theme
+     *
+     * @return \Illuminate\View\View
+     */
+    public function userTheme()
+    {
+        $user = Auth::user();
+        $themes = Theme::get();
+        return view('users.admin_theme', compact(
+            'user',
+            'themes'
         ));
     }
 

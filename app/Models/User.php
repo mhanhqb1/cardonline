@@ -28,7 +28,8 @@ class User extends Authenticatable
         'phone',
         'birthday',
         'description',
-        'vip'
+        'vip',
+        'theme_id'
     ];
 
     /**

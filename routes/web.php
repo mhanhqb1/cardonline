@@ -33,6 +33,7 @@ Route::get('/user/info', function () {
 Route::get('/{user_name}', [HomeController::class, 'userInfo'])->name('user.info');
 
 Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
+Route::get('/users/theme', [HomeController::class, 'userTheme'])->middleware(['auth'])->name('user.theme');
 Route::post('/users/updateInfo', [HomeController::class, 'updateInfo'])->middleware(['auth'])->name('user.update_info');
 
 require __DIR__.'/auth.php';
