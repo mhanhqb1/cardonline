@@ -57,6 +57,10 @@ $currentRoute = \Request::route()->getName();
             text-align: center;
         }
 
+        .hide {
+            display: none;
+        }
+
         .container {
             display: block;
             margin: 24px auto;

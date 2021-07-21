@@ -73,6 +73,17 @@ class HomeController extends Controller
     {
         $user = User::where('user_name', $userName)->first();
         if (!empty($user)) {
+            if (!empty($_GET['theme_id'])) {
+                $userLogged = Auth::user();
+                if (!empty($userLogged) && $user->id == $userLogged->id) {
+                    $theme = Theme::find($_GET['theme_id']);
+                    if (!empty($theme)) {
+                        return view('users.temp_'.$theme->code, compact(
+                            'user'
+                        ));
+                    }
+                }
+            }
             return view('users.temp_1', compact(
                 'user'
             ));
