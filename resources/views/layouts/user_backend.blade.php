@@ -14,6 +14,7 @@ $currentRoute = \Request::route()->getName();
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - {{ config('app.name') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
         * {
             margin: 0;
@@ -26,17 +27,8 @@ $currentRoute = \Request::route()->getName();
         html,
         body {
             height: 100%;
-            font-size: 14px;
+            font-size: 1em;
             color: #232323;
-        }
-
-        .btn {
-            padding: 0 24px;
-            line-height: 32px;
-            border-radius: 5px;
-            font-weight: 500;
-            cursor: pointer;
-            outline: none;
         }
 
         @foreach($colors as $k=> $v)
@@ -61,6 +53,13 @@ $currentRoute = \Request::route()->getName();
             display: none;
         }
 
+        h5 > .btn-link {
+            font-size: 1.2em;
+            font-weight: 500;
+            width: 100%;
+            text-align: center;
+        }
+
         .container {
             display: block;
             margin: 24px auto;
@@ -76,12 +75,12 @@ $currentRoute = \Request::route()->getName();
             display: block;
         }
 
-        .tabs {
+        .tabs .tabs-header {
             display: flex;
             flex-direction: row;
         }
 
-        .tabs>a {
+        .tabs .tabs-header>a {
             flex: 1;
             text-align: center;
             padding: 10px 0 24px;
@@ -92,12 +91,15 @@ $currentRoute = \Request::route()->getName();
             justify-content: center;
             color: #232323;
         }
+        .tabs .tabs-header h2 {
+            font-size: 1.5em;
+        }
 
-        .tabs>a>span {
+        .tabs .tabs-header>a>span {
             display: block;
         }
 
-        .tabs>a.active {
+        .tabs .tabs-header>a.active {
             border-color: #0066ff;
             color: #0066ff;
         }
@@ -130,13 +132,15 @@ $currentRoute = \Request::route()->getName();
             margin-top: 5px;
         }
 
-        .info>div>div .user-input input {
+        .info>div>div .user-input input,
+        .info>div>div .user-input textarea {
             width: 100%;
             padding: 10px 40px 10px 10px;
             font-size: 14px;
             outline: none;
             border: 1px solid #a6a6a6;
             border-radius: 5px;
+            text-align: left;
         }
 
         .info>div>div .user-input span {
@@ -157,25 +161,29 @@ $currentRoute = \Request::route()->getName();
     </header>
     <div class="container">
         <div class="tabs">
-            <a href="{{ route('dashboard') }}" class="{{ $currentRoute == 'dashboard' ? 'active' : '' }}">
-                <span><i class="fas fa-house-user"></i></span> {{ __('sys.user_info') }}
-            </a>
-            <a href="{{ route('user.theme') }}" class="{{ $currentRoute == 'user.theme' ? 'active' : '' }}">
-                <span><i class="fas fa-adjust"></i></span> {{ __('sys.theme') }}
-            </a>
-            <a href="/">
-                <span><i class="fas fa-user-lock"></i></span> {{ __('sys.change_pass') }}
-            </a>
-            <a href="/">
-                <span><i class="fas fa-sign-out-alt"></i></span> {{ __('sys.logout') }}
-            </a>
-        </div>
-        <div class="tab-content">
-            @yield('content')
+            <div class="tabs-header">
+                <a href="{{ route('dashboard') }}" class="{{ $currentRoute == 'dashboard' ? 'active' : '' }}">
+                    <span><i class="fas fa-house-user"></i></span> {{ __('sys.user_info') }}
+                </a>
+                <a href="{{ route('user.theme') }}" class="{{ $currentRoute == 'user.theme' ? 'active' : '' }}">
+                    <span><i class="fas fa-adjust"></i></span> {{ __('sys.theme') }}
+                </a>
+                <a href="/">
+                    <span><i class="fas fa-user-lock"></i></span> {{ __('sys.change_pass') }}
+                </a>
+                <a href="/">
+                    <span><i class="fas fa-sign-out-alt"></i></span> {{ __('sys.logout') }}
+                </a>
+            </div>
+            <div class="tabs-content">
+                @yield('content')
+            </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
@@ -188,7 +196,27 @@ $currentRoute = \Request::route()->getName();
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $('.info .btn-submit').on('click', function() {
+            $('.js-btn-add-social').on('click', function(){
+                $('#socialModal').modal();
+            });
+            $('.js-btn-add-product').on('click', function(){
+                $('#productModal').modal();
+            });
+            $('.js-social-save').on('click', function(){
+                let data = {};
+                $('#socialModal .form-control').each(function(){
+                    let name = $(this).attr('name');
+                    let val = $(this).val();
+                    data[name] = val;
+                });
+                let html = "<div class='social'>";
+                html += "<span>"+data['social_type']+"</span>";
+                html += "<p>"+data['social_url']+"</p>"
+                html += "</div>";
+                $('.js-social-container').append(html);
+                $('#socialModal').modal('hide');
+            });
+            $('.info#tab-1 .btn-submit').on('click', function() {
                 let parent = $(this).closest(".info");
                 let data = {};
                 parent.find('.input-value').each(function(e) {

@@ -18,5 +18,6 @@ return [
     'job_title' => 'Nghề nghiệp',
     'company_name' => 'Tên công ty',
     'phone' => 'Số điện thoại',
-    'address' => 'Địa chỉ'
+    'address' => 'Địa chỉ',
+    'description' => 'Mô tả'
 ];
