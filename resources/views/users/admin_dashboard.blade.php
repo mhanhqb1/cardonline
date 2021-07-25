@@ -25,6 +25,7 @@ $userInfos = [
         'title' => __('user.address')
     ],
 ];
+$socialConfig = config('app.socials');
 ?>
 @extends('layouts.user_backend')
 
@@ -77,7 +78,20 @@ $userInfos = [
         </div>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
             <div class="card-body">
-                <div class='js-social-container'></div>
+                <div class='js-social-container'>
+                    @if (!empty($userSocials))
+                        @foreach ($userSocials as $v)
+                        <div class='social bg-6' data-id="{{ $v->id }}">
+                            <span class='sicon sicon-{{ $v->type }}'></span>
+                            <div>
+                                <input class='form-group' value="{{ $v->url }}"/>
+                            </div>
+                            <span class='btn js-btn-save'><i class="fas fa-save"></i></span>
+                            <span class='btn js-btn-del'><i class="fas fa-trash-alt"></i></span>
+                        </div>
+                        @endforeach
+                    @endif
+                </div>
                 <button class='btn bg-2 bc-2 c-1 js-btn-add-social'>{{ __('sys.add_new') }}</button>
             </div>
         </div>
@@ -112,9 +126,9 @@ $userInfos = [
                 <div class="form-group">
                     <label>{{ __('sys.type') }}</label>
                     <select name="social_type" class="form-control js-social-type">
-                        <option value='1'>Facebook</option>
-                        <option value='2'>Youtube</option>
-                        <option value='3'>Instagram</option>
+                        @foreach ($socialConfig as $k => $v)
+                            <option value="{{ $k }}">{{ $v }}</option>
+                        @endforeach>
                     </select>
                 </div>
                 <div class="form-group">

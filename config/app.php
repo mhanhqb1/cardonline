@@ -229,4 +229,18 @@ return [
 
     ],
 
+    'socials' => [
+        'facebook' => 'Facebook',
+        'instagram' => 'Instagram',
+        'zalo' => 'Zalo',
+        'twitter' => 'Twitter',
+        'skype' => 'Skype',
+        'slack' => 'Slack',
+        'tiktok' => 'Tiktok',
+        'youtube' => 'Youtube',
+        'linkedin' => 'LinkedIn',
+        'dailymotion' => 'Dailymotion',
+        'telegram' => 'Telegram'
+    ]
+
 ];

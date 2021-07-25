@@ -35,5 +35,8 @@ Route::get('/{user_name}', [HomeController::class, 'userInfo'])->name('user.info
 Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 Route::get('/users/theme', [HomeController::class, 'userTheme'])->middleware(['auth'])->name('user.theme');
 Route::post('/users/updateInfo', [HomeController::class, 'updateInfo'])->middleware(['auth'])->name('user.update_info');
+Route::post('/users/updateSocials', [HomeController::class, 'updateSocials'])->middleware(['auth'])->name('user.update_socials');
+Route::post('/users/deleteSocials', [HomeController::class, 'deleteSocials'])->middleware(['auth'])->name('user.delete_socials');
+Route::post('/users/saveSocials', [HomeController::class, 'saveSocials'])->middleware(['auth'])->name('user.save_socials');
 
 require __DIR__.'/auth.php';

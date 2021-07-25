@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\Theme;
+use App\Models\UserSocial;
 
 class HomeController extends Controller
 {
@@ -18,8 +19,10 @@ class HomeController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
+        $userSocials = UserSocial::where('user_id', $user->id)->orderBy('position', 'asc')->get();
         return view('users.admin_dashboard', compact(
-            'user'
+            'user',
+            'userSocials'
         ));
     }
 
@@ -60,6 +63,67 @@ class HomeController extends Controller
             }
         }
         $u->save();
+        echo json_encode($result);
+        die();
+    }
+
+    /**
+     * Update user social info
+     *
+     * @return \Illuminate\View\View
+     */
+    public function updateSocials(Request $request)
+    {
+        $result = [
+            'status' => 'OK',
+            'data' => ''
+        ];
+        $user = Auth::user();
+        $userSocial = new UserSocial();
+        $userSocial->user_id = $user->id;
+        $userSocial->type = $request->social_type;
+        $userSocial->url = $request->social_url;
+        $userSocial->save();
+        echo json_encode($result);
+        die();
+    }
+
+    /**
+     * Delete user social
+     *
+     * @return \Illuminate\View\View
+     */
+    public function deleteSocials(Request $request)
+    {
+        $result = [
+            'status' => 'OK',
+            'data' => ''
+        ];
+        $id = $request->id;
+        $user = Auth::user();
+        $userSocial = UserSocial::where('id', $id)->where('user_id', $user->id)->first();
+        $userSocial->delete();
+        echo json_encode($result);
+        die();
+    }
+
+    /**
+     * Save user social
+     *
+     * @return \Illuminate\View\View
+     */
+    public function saveSocials(Request $request)
+    {
+        $result = [
+            'status' => 'OK',
+            'data' => ''
+        ];
+        $id = $request->id;
+        $val = $request->val;
+        $user = Auth::user();
+        $userSocial = UserSocial::where('id', $id)->where('user_id', $user->id)->first();
+        $userSocial->url = $val;
+        $userSocial->save();
         echo json_encode($result);
         die();
     }

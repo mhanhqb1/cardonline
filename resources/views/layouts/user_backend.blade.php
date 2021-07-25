@@ -3,6 +3,7 @@ $colors = [
     '#fff', '#0066ff', '#333333', '#a6a6a6', '#E6E6E6', '#F9F9F9'
 ];
 $currentRoute = \Request::route()->getName();
+$socialConfig = config('app.socials');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -150,6 +151,46 @@ $currentRoute = \Request::route()->getName();
             transform: translateY(-50%);
             cursor: pointer;
         }
+
+        .social {
+            display: flex;
+            align-items: center;
+            padding: 12px 12px 12px 24px;
+            margin: 12px 0;
+        }
+        .social>div {
+            flex: 1;
+            margin: 0;
+            padding: 0 12px 0 24px;
+        }
+        .social>div>input {
+            width: 100%;
+            padding: 10px 40px 10px 10px;
+            font-size: 14px;
+            outline: none;
+            border: 1px solid #a6a6a6;
+            border-radius: 5px;
+            text-align: left;
+            margin: 0;
+        }
+        .sicon {
+            width: 50px;
+            height: 50px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 100%;
+        }
+        @foreach($socialConfig as $k => $v)
+            .sicon-{{ $k }} {
+                background-image: url('../images/icon-{{ $k }}-4.svg');
+            }
+            .sicon-{{ $k }}-1 {
+                background-image: url('../images/icon-{{ $k }}-1.svg');
+            }
+            .sicon-{{ $k }}-4 {
+                background-image: url('../images/icon-{{ $k }}-4.svg');
+            }
+        @endforeach
     </style>
 </head>
 
@@ -188,6 +229,9 @@ $currentRoute = \Request::route()->getName();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
         const apiUrl = '{{ route('user.update_info') }}';
+        const apiUserSocialUrl = '{{ route('user.update_socials') }}';
+        const apiUserSocialDelUrl = '{{ route('user.delete_socials') }}';
+        const apiUserSocialSaveUrl = '{{ route('user.save_socials') }}';
         const apiSuccessMessage = '{{ __('sys.save_success') }}';
         const apiErrorMessage = '{{ __('sys.save_error') }}';
         $(document).ready(function() {
@@ -209,12 +253,77 @@ $currentRoute = \Request::route()->getName();
                     let val = $(this).val();
                     data[name] = val;
                 });
-                let html = "<div class='social'>";
-                html += "<span>"+data['social_type']+"</span>";
-                html += "<p>"+data['social_url']+"</p>"
-                html += "</div>";
-                $('.js-social-container').append(html);
-                $('#socialModal').modal('hide');
+                $.ajax({
+                    url: apiUserSocialUrl,
+                    data: data,
+                    type: "POST",
+                    dataType: "Json",
+                    success: function(res) {
+                        if (res.status == 'OK') {
+                            let html = "<div class='social'>";
+                            html += "<span class='sicon sicon-"+data['social_type']+"'></span>";
+                            html += "<p>"+data['social_url']+"</p>"
+                            html += "</div>";
+                            $('.js-social-container').append(html);
+                            $('#socialModal').modal('hide');
+                            toastr.success(apiSuccessMessage);
+                        } else {
+                            toastr.error(apiErrorMessage);
+                        }
+                    },
+                    error: function() {
+                        toastr.error(apiErrorMessage);
+                    }
+                });
+            });
+            $('.social > .js-btn-save').on('click', function() {
+                const parent = $(this).parent();
+                const id = parent.attr('data-id');
+                const value = parent.find('input').val();
+                $.ajax({
+                    url: apiUserSocialSaveUrl,
+                    data: {
+                        id: id,
+                        val: value
+                    },
+                    type: "POST",
+                    dataType: "Json",
+                    success: function(res) {
+                        if (res.status == 'OK') {
+                            toastr.success(apiSuccessMessage);
+                        } else {
+                            toastr.error(apiErrorMessage);
+                        }
+                    },
+                    error: function() {
+                        toastr.error(apiErrorMessage);
+                    }
+                });
+
+            });
+            $('.social > .js-btn-del').on('click', function() {
+                const parent = $(this).parent();
+                const id = parent.attr('data-id');
+                $.ajax({
+                    url: apiUserSocialDelUrl,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    dataType: "Json",
+                    success: function(res) {
+                        if (res.status == 'OK') {
+                            parent.remove();
+                            toastr.success(apiSuccessMessage);
+                        } else {
+                            toastr.error(apiErrorMessage);
+                        }
+                    },
+                    error: function() {
+                        toastr.error(apiErrorMessage);
+                    }
+                });
+
             });
             $('.info#tab-1 .btn-submit').on('click', function() {
                 let parent = $(this).closest(".info");
