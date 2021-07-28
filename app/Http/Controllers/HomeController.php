@@ -136,20 +136,26 @@ class HomeController extends Controller
     public function userInfo($userName)
     {
         $user = User::where('user_name', $userName)->first();
+        if (empty($user)) {
+            return abort(404);
+        }
+        $userSocials = UserSocial::where('user_id', $user->id)->get();
         if (!empty($user)) {
             if (!empty($_GET['theme_id'])) {
                 $userLogged = Auth::user();
                 if (!empty($userLogged) && $user->id == $userLogged->id) {
                     $theme = Theme::find($_GET['theme_id']);
                     if (!empty($theme)) {
-                        return view('users.temp_'.$theme->code, compact(
-                            'user'
+                        return view('themes.theme_'.$theme->code, compact(
+                            'user',
+                            'userSocials'
                         ));
                     }
                 }
             }
             return view('users.temp_1', compact(
-                'user'
+                'user',
+                'userSocials'
             ));
         }
         return abort(404);
